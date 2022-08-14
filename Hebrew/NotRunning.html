@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+
+<html lang="he" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="refresh" content="15">
+    <meta charset="utf-8" />
+    <title>AMP מצב שיחזור</title>
+    <link type="text/css" href="shared/CSS/Stylesheet.css" rel="stylesheet" />
+    <script type="text/javascript" src="shared/Scripts/jquery-3.2.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <style type="text/css">
+        html {
+            height: auto;
+            overflow-x: initial;
+            overflow-y: initial;
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 700px;
+            min-width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10%;
+        }
+
+        pre {
+            background-color: rgba(0,0,0,0.3);
+            border: 1px solid gray;
+            padding: 8px;
+            box-shadow: inset 8px 8px 16px rgba(0,0,0,0.7);
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            var t = new Date().getTime();
+
+            switch (localStorage.restartState) {
+                case "upgrade":
+                case "restart":
+                    $("#notRunning").hide();
+                    $("#" + localStorage.restartState).show();
+                    return;
+                case undefined:
+                case null:
+                case "none":
+                    break;
+            }
+
+            $.getJSON("shared/installState.json?t=" + t, {}, function () {
+                $("#notRunning").hide();
+                $("#installing").show();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div id="checking" style="display:none;">
+            <h1>AMP לא זמין</h1>
+            <p>בדיקת סטטוס, אנא המתן...</p>
+            <div class="loader" style="display:block"></div>
+        </div>
+        <div id="notRunning">
+            <h1>AMP לא פועל כרגע</h1>
+            <p>לא ניתן היה לחבר את אפלקצית ה-AMP שלך, סביר להניח שזה אומר שהוא לא פועל.</p>
+            <p>אם אתה מבצע את ההתקנה הראשונה שלך, אנא המתן דקה והדף יטען אוטומטית.</p>
+            <p>אם AMP הפסיק, אתה יכול להפעיל אותו מחדש על ידי הרצה של הפקודה:</p>
+            <p>מערכות לינוקס:</p>
+            <pre>sudo service ampinstmgr restart</pre>
+            <p>מערכות Windows:</p>
+            <pre>ampinstmgr startall</pre>
+            <br />
+        </div>
+        <div id="restart" style="display:none;">
+            <h1>AMP עושה הפעלה מחדש</h1>
+            <p>AMP עושה הפעלה מחדש .זה יכול לקחת 2 דקות.</p>
+            <p>דף זה יטען מחדש באופן אוטומטי לאחר שה- AMP יופעל מחדש.</p>
+            <p>אם הדף לא מגיב תוך 5 דקות, אתה יכול להפעיל אותו מחדש על ידי הרצת הפקודה:</p>
+            <p>מערכות לינוקס:</p>
+            <pre>sudo service ampinstmgr restart</pre>
+            <p>מערכות Windows:</p>
+            <pre>ampinstmgr startall</pre>
+            <br />
+            <div class="notificationDescription">Restarting AMP...</div>
+            <div class="notificationProgessContainer">
+                <div class="notificationProgressBar progUnknown" style="width:20%">
+                    <div class="notificationSpeed"></div>
+                </div>
+            </div>
+            <br />
+        </div>
+        <div id="upgrade" style="display:none;">
+            <h1>AMP מתעדכן כעת</h1>
+            <p>AMP כרגע מבצע עדכוני מערכת. פעולה זו עשויה להימשך עד 5 דקות.</p>
+            <p>הדף הזה ייטען מחדש באופן אוטומטי לאחר שה-AMP יסיים את העדכון.</p>
+            <p>אם הדף לא מגיב תוך 5 דקות, אתה יכול להפעיל אותו מחדש על ידי הרצת הפקודה::</p>
+            <p>מערכות לינוקס:</p>
+            <pre>sudo service ampinstmgr restart</pre>
+            <p>מערכות Windows:</p>
+            <pre>ampinstmgr startall</pre>
+            <p>לאחר הפעלת AMP ייתכן שיהיה צורך לבצע טעינה מחדש בכוח (Ctrl+F5/Shift+F5).</p>
+            <br />
+            <div class="notificationDescription">Upgrading AMP...</div>
+            <div class="notificationProgessContainer">
+                <div class="notificationProgressBar progUnknown" style="width:20%">
+                    <div class="notificationSpeed"></div>
+                </div>
+            </div>
+            <br />
+        </div>
+        <div id="installing" style="display:none;">
+            <h1>AMP מותקן כעת</h1>
+            <p>תודה שהתקנת AMP על ידי CubeCoders&trade;</p>
+            <p>אנא המתן בזמן ש- AMP ממשיכה בהתקנה.לאחר שההתקנה תסיים דף זה תרענן אוטומטית.תהליך זה אמור לארוך פחות משתי דקות.</p>
+            <p>AMP התקין אוטומטית את הדרישות המוקדמות הנדרשות, וכעת היא יוצרת את ממשק ניהול ברירת המחדל.</p>
+            <p style="font-weight:bold">אם מסך זה נשאר גלוי במשך יותר מחמש דקות, הפעל את הדברים הבאים כ- root:<p>
+            <pre>su -l amp -c "ampinstmgr restart ADS01"</pre>
+            <p>בזמן שה- AMP מתקין, ייתכן שתרצה לבדוק את שלנו <a href="https://wiki.cubecoders.com/">וויקי</a> or <a href="https://cubecoders.com/discord">Join our Discord</a>.</p>
+            <div class="notificationDescription">התקנת AMP...</div>
+            <div class="notificationProgessContainer">
+                <div class="notificationProgressBar progUnknown" style="width:20%">
+                    <div class="notificationSpeed"></div>
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+</body>
+</html>
